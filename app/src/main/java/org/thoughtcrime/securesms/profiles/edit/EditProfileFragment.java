@@ -29,7 +29,6 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dd.CircularProgressButton;
-import com.google.android.gms.common.util.IOUtils;
 
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.contacts.avatars.ResourceContactPhoto;
@@ -47,6 +46,7 @@ import org.thoughtcrime.securesms.providers.BlobProvider;
 import org.thoughtcrime.securesms.registration.RegistrationUtil;
 import org.thoughtcrime.securesms.util.FeatureFlags;
 import org.thoughtcrime.securesms.util.StringUtil;
+import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.concurrent.SimpleTask;
 import org.thoughtcrime.securesms.util.text.AfterTextChanged;
 import org.whispersystems.libsignal.util.guava.Optional;
@@ -169,7 +169,7 @@ public class EditProfileFragment extends Fragment {
           Media       result = data.getParcelableExtra(AvatarSelectionActivity.EXTRA_MEDIA);
           InputStream stream = BlobProvider.getInstance().getStream(requireContext(), result.getUri());
 
-          return IOUtils.readInputStreamFully(stream);
+          return Util.readFully(stream);
         } catch (IOException ioException) {
           Log.w(TAG, ioException);
           return null;

@@ -2,8 +2,6 @@ package org.thoughtcrime.securesms.util.concurrent;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.common.util.concurrent.NumberedThreadFactory;
-
 import org.thoughtcrime.securesms.util.LinkedBlockingLifoQueue;
 
 import java.util.concurrent.ExecutorService;
