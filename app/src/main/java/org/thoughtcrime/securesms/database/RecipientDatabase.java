@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.annimon.stream.Stream;
-import com.google.android.gms.common.util.ArrayUtils;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -125,13 +124,14 @@ public class RecipientDatabase extends Database {
       STORAGE_SERVICE_ID, DIRTY
   };
 
-  private static final String[] RECIPIENT_FULL_PROJECTION = ArrayUtils.concat(
-      new String[] { TABLE_NAME + "." + ID },
-      RECIPIENT_PROJECTION,
-      new String[] {
-        IdentityDatabase.TABLE_NAME + "." + IdentityDatabase.VERIFIED + " AS " + IDENTITY_STATUS,
-        IdentityDatabase.TABLE_NAME + "." + IdentityDatabase.IDENTITY_KEY + " AS " + IDENTITY_KEY
-      });
+  private static final String[] RECIPIENT_FULL_PROJECTION = Stream.concat(
+      Stream.of(new String[] { TABLE_NAME + "." + ID }),
+      Stream.concat(Stream.of(RECIPIENT_PROJECTION),
+          Stream.of(new String[] {
+            IdentityDatabase.TABLE_NAME + "." + IdentityDatabase.VERIFIED + " AS " + IDENTITY_STATUS,
+            IdentityDatabase.TABLE_NAME + "." + IdentityDatabase.IDENTITY_KEY + " AS " + IDENTITY_KEY
+          })
+      )).toArray(String[]::new);
 
 
   public static final String[] CREATE_INDEXS = new String[] {
