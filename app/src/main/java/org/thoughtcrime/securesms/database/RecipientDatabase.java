@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.annimon.stream.Stream;
-import com.google.android.gms.common.util.ArrayUtils;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -136,13 +135,14 @@ public class RecipientDatabase extends Database {
                                                                    .map(columnName -> TABLE_NAME + "." + columnName)
                                                                    .toList().toArray(new String[0]);
 
-  private static final String[] RECIPIENT_FULL_PROJECTION = ArrayUtils.concat(
-      new String[] { TABLE_NAME + "." + ID },
-      TYPED_RECIPIENT_PROJECTION,
-      new String[] {
-        IdentityDatabase.TABLE_NAME + "." + IdentityDatabase.VERIFIED + " AS " + IDENTITY_STATUS,
-        IdentityDatabase.TABLE_NAME + "." + IdentityDatabase.IDENTITY_KEY + " AS " + IDENTITY_KEY
-      });
+  private static final String[] RECIPIENT_FULL_PROJECTION = Stream.concat(
+      Stream.of(new String[] { TABLE_NAME + "." + ID }),
+      Stream.concat(Stream.of(TYPED_RECIPIENT_PROJECTION),
+          Stream.of(new String[] {
+            IdentityDatabase.TABLE_NAME + "." + IdentityDatabase.VERIFIED + " AS " + IDENTITY_STATUS,
+            IdentityDatabase.TABLE_NAME + "." + IdentityDatabase.IDENTITY_KEY + " AS " + IDENTITY_KEY
+          })
+      )).toArray(String[]::new);
 
   public static final String[] CREATE_INDEXS = new String[] {
       "CREATE INDEX IF NOT EXISTS recipient_dirty_index ON " + TABLE_NAME + " (" + DIRTY + ");",
@@ -754,9 +754,9 @@ public class RecipientDatabase extends Database {
                                                + " LEFT OUTER JOIN " + GroupDatabase.TABLE_NAME + " ON " + TABLE_NAME + "." + GROUP_ID + " = " + GroupDatabase.TABLE_NAME + "." + GroupDatabase.GROUP_ID;
     List<RecipientSettings> out   = new ArrayList<>();
 
-    String[] columns = ArrayUtils.concat(RECIPIENT_FULL_PROJECTION,
-      new String[]{ GroupDatabase.TABLE_NAME + "." + GroupDatabase.GROUP_ID,
-                    GroupDatabase.TABLE_NAME + "." + GroupDatabase.V2_MASTER_KEY });
+    String[] columns = Stream.concat(Stream.of(RECIPIENT_FULL_PROJECTION),
+      Stream.of(new String[]{ GroupDatabase.TABLE_NAME + "." + GroupDatabase.GROUP_ID,
+                    GroupDatabase.TABLE_NAME + "." + GroupDatabase.V2_MASTER_KEY })).toArray(String[]::new);
 
     try (Cursor cursor = db.query(table, columns, query, args, null, null, null)) {
       while (cursor != null && cursor.moveToNext()) {
