@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <application>
+        <meta-data android:name="com.google.android.gms.version"
+           android:value="1" tools:replace="android:value" />
+
         <receiver android:name=".service.UpdateApkRefreshListener">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
