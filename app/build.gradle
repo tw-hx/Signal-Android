@@ -284,14 +284,14 @@ dependencies {
     implementation "androidx.paging:paging-runtime:2.1.2"
 
 
-    implementation('com.google.firebase:firebase-messaging:17.3.4') {
+    playImplementation('com.google.firebase:firebase-messaging:17.3.4') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
     }
 
-    implementation 'com.google.android.gms:play-services-maps:16.1.0'
-    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+    playImplementation 'com.google.android.gms:play-services-maps:16.1.0'
+    playImplementation 'com.google.android.gms:play-services-auth:16.0.1'
 
     implementation 'com.google.android.exoplayer:exoplayer-core:2.9.1'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.9.1'
