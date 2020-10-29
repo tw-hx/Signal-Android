@@ -1,0 +1,68 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.0.2'
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'witness'
+apply from: 'witness-verifications.gradle'
+
+repositories {
+    google()
+    mavenCentral()
+    jcenter()
+}
+
+android {
+    flavorDimensions 'distribution', 'gms', 'environment'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.3'
+
+    defaultConfig {
+        minSdkVersion 19
+    }
+
+    buildTypes {
+        debug {}
+        flipper {}
+        release {}
+    }
+    productFlavors {
+        play {
+            dimension 'distribution'
+        }
+        website {
+           dimension 'distribution'
+        }
+        gms {
+            dimension 'gms'
+        }
+        foss {
+            dimension 'gms'
+        }
+        internal {
+           dimension 'distribution'
+        }
+        prod {
+            dimension 'environment'
+        }
+        staging {
+            dimension 'environment'
+        }
+        
+    }
+}
+
+configurations {
+    compileClasspath
+}
+
+dependencies {
+    implementation 'androidx.fragment:fragment:1.1.0'
+}
