@@ -1,0 +1,22 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion BUILD_TOOL_VERSION
+    compileSdkVersion COMPILE_SDK
+
+    defaultConfig {
+        minSdkVersion MINIMUM_SDK
+        targetSdkVersion TARGET_SDK
+    }
+
+    compileOptions {
+        sourceCompatibility JAVA_VERSION
+        targetCompatibility JAVA_VERSION
+    }
+}
+
+dependencies {
+    implementation 'androidx.fragment:fragment-ktx:1.5.2'
+    implementation 'androidx.preference:preference:1.0.0'
+    implementation 'org.osmdroid:osmdroid-android:6.1.14'
+}
