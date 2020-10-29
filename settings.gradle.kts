@@ -49,6 +49,7 @@ if (libsignalClientPath is String) {
 }
 
 include(":app")
+include(":libfakegms")
 include(":libsignal-service")
 include(":lintchecks")
 include(":paging")
