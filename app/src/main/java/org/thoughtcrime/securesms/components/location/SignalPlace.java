@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.thoughtcrime.securesms.BuildConfig;
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.maps.AddressData;
 import org.thoughtcrime.securesms.util.JsonUtils;
@@ -19,7 +20,8 @@ import java.io.IOException;
 
 public class SignalPlace {
 
-  private static final String URL = "https://maps.google.com/maps";
+  private static final String GMS_URL = "https://maps.google.com/maps";
+  private static final String OSM_URL = "https://www.openstreetmap.org/";
   private static final String TAG = Log.tag(SignalPlace.class);
 
   @JsonProperty
@@ -62,10 +64,21 @@ public class SignalPlace {
       description += (address + "\n");
     }
 
-    description += Uri.parse(URL)
-                      .buildUpon()
-                      .appendQueryParameter("q", String.format("%s,%s", latitude, longitude))
-                      .build().toString();
+    if (BuildConfig.USE_OSM) {
+      // Thanks to https://github.com/sergimn for suggesting place marker
+      description += Uri.parse(OSM_URL)
+                        .buildUpon()
+                        .appendQueryParameter("mlat", String.format("%s", latitude))
+                        .appendQueryParameter("mlon", String.format("%s", longitude))
+                        .encodedFragment(String.format("map=15/%s/%s", latitude, longitude))
+                        .build().toString();
+    }
+    else {
+      description += Uri.parse(GMS_URL)
+                        .buildUpon()
+                        .appendQueryParameter("q", String.format("%s,%s", latitude, longitude))
+                        .build().toString();
+    }
 
     return description;
   }
