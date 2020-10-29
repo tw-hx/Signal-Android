@@ -12,8 +12,8 @@ data class ChatsSettingsState(
   val clientDeprecated: Boolean
   // JW: added extra preferences
   ,
-  val keepViewOnceMessages: Boolean,
   val keepExpiringMessages: Boolean,
+  val keepViewOnceMessages: Boolean,
   val ignoreRemoteDelete: Boolean,
   val deleteMediaOnly: Boolean
 ) {

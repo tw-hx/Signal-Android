@@ -198,6 +198,9 @@ mp4parser-streaming = { module = "org.mp4parser:streaming", version.ref = "mp4pa
 mp4parser-muxer = { module = "org.mp4parser:muxer", version.ref = "mp4parser" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "ui-test-junit4" }
 
+# Signal-FOSS
+osmdroid = "org.osmdroid:osmdroid-android:6.1.20"
+
 [bundles]
 media3 = ["androidx-media3-exoplayer", "androidx-media3-session", "androidx-media3-ui"]
 mp4parser = ["mp4parser-isoparser", "mp4parser-streaming", "mp4parser-muxer"]
