@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.thoughtcrime.securesms.BuildConfig;
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.maps.AddressData;
 import org.thoughtcrime.securesms.util.JsonUtils;
@@ -62,10 +63,15 @@ public class SignalPlace {
       description += (address + "\n");
     }
 
-    description += Uri.parse(URL)
-                      .buildUpon()
-                      .appendQueryParameter("q", String.format("%s,%s", latitude, longitude))
-                      .build().toString();
+    if (BuildConfig.USE_OSM) {
+        description = "https://www.openstreetmap.org/#map=15/" + String.format("%s/%s", latitude, longitude);
+    }
+    else {
+        description += Uri.parse(URL)
+                          .buildUpon()
+                          .appendQueryParameter("q", String.format("%s,%s", latitude, longitude))
+                          .build().toString();
+    }
 
     return description;
   }
