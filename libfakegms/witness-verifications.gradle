@@ -1,0 +1,6 @@
+dependencyVerification {
+    verify = [
+        ['androidx.fragment:fragment:1.1.0',
+         'a14c8b8f2153f128e800fbd266a6beab1c283982a29ec570d2cc05d307d81496']
+    ]
+}
