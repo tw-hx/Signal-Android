@@ -127,6 +127,9 @@ dependencyResolutionManagement {
             // Can't use the newest version because it hits some weird NoClassDefFoundException
             alias('jknack-handlebars').to('com.github.jknack:handlebars:4.0.7')
 
+            // Signal-FOSS
+            alias('osmdroid').to('org.osmdroid:osmdroid-android:6.1.14')
+
             // Mp4Parser
             alias('mp4parser-isoparser').to('org.mp4parser', 'isoparser').versionRef('mp4parser')
             alias('mp4parser-streaming').to('org.mp4parser', 'streaming').versionRef('mp4parser')
