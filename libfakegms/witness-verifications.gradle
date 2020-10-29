@@ -1,0 +1,14 @@
+// Auto-generated, use ./gradlew calculateChecksums to regenerate
+
+dependencyVerification {
+    verify = [
+        ['androidx.fragment:fragment:1.2.5',
+         'd19e82d142def6c4e136da70bf92f194c0ecc61d14ab4e84567b2ced0920fa93'],
+
+        ['androidx.preference:preference:1.0.0',
+         'ea9fde25606eb456210ffe9f7e51048abd776b55a34c0cc6608282b5699122d1'],
+
+        ['org.osmdroid:osmdroid-android:6.1.10',
+         '7ff9e96eb42d96589420f6f8638ff3e3c79cc15bb98a57ec37ac06a7fce2b827']
+    ]
+}
