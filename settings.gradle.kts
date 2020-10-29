@@ -30,6 +30,7 @@ dependencyResolutionManagement {
 }
 
 include(":app")
+include(":libfakegms")
 include(":libsignal-service")
 include(":lintchecks")
 include(":paging")
