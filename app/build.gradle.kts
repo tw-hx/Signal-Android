@@ -49,6 +49,8 @@ val selectableVariants = listOf(
   "playStagingInstrumentation",
   "playStagingRelease",
   "websiteProdSpinner",
+  "websiteFossProdRelease",
+  "websiteGmsProdRelease",
   "websiteProdRelease"
 )
 
@@ -87,7 +89,7 @@ android {
   compileSdkVersion = signalCompileSdkVersion
   ndkVersion = signalNdkVersion
 
-  flavorDimensions += listOf("distribution", "environment")
+  flavorDimensions += listOf("distribution", "gms", "environment")
   testBuildType = "instrumentation"
 
   android.bundle.language.enableSplit = false
@@ -360,8 +362,10 @@ android {
     }
 
     create("website") {
+      val MAU = if (gradle.startParameter.taskRequests.toString().contains("Foss")) "false" else "true"
+
       dimension = "distribution"
-      buildConfigField("boolean", "MANAGES_APP_UPDATES", "true")
+      buildConfigField("boolean", "MANAGES_APP_UPDATES", "${MAU}")
       buildConfigField("String", "APK_UPDATE_MANIFEST_URL", "\"https://updates.signal.org/android/latest.json\"")
       buildConfigField("String", "BUILD_DISTRIBUTION_TYPE", "\"website\"")
     }
@@ -379,6 +383,17 @@ android {
       buildConfigField("String", "APK_UPDATE_MANIFEST_URL", "\"${apkUpdateManifestUrl}\"")
       buildConfigField("String", "BUILD_DISTRIBUTION_TYPE", "\"nightly\"")
       buildConfigField("boolean", "MESSAGE_BACKUP_RESTORE_ENABLED", "true")
+    }
+
+    create("gms") {
+      dimension = "gms"
+      isDefault = true
+      buildConfigField("boolean", "USE_OSM", "false")
+    }
+
+    create("foss") {
+      dimension = "gms"
+      buildConfigField("boolean", "USE_OSM", "true")
     }
 
     create("prod") {
@@ -554,14 +569,16 @@ dependencies {
   implementation(libs.androidx.asynclayoutinflater)
   implementation(libs.androidx.asynclayoutinflater.appcompat)
   implementation(libs.androidx.emoji2)
-  implementation(libs.firebase.messaging) {
+  "gmsImplementation"(libs.firebase.messaging) {
     exclude(group = "com.google.firebase", module = "firebase-core")
     exclude(group = "com.google.firebase", module = "firebase-analytics")
     exclude(group = "com.google.firebase", module = "firebase-measurement-connector")
   }
-  implementation(libs.google.play.services.maps)
-  implementation(libs.google.play.services.auth)
-  implementation(libs.google.signin)
+  "gmsImplementation"(libs.google.play.services.maps)
+  "gmsImplementation"(libs.google.play.services.auth)
+  "gmsImplementation"(libs.google.signin)
+  "fossImplementation"(project(":libfakegms"))
+  "fossImplementation"(libs.osmdroid)
   implementation(libs.bundles.media3)
   implementation(libs.conscrypt.android)
   implementation(libs.signal.aesgcmprovider)
@@ -599,14 +616,14 @@ dependencies {
   implementation(libs.accompanist.drawablepainter)
   implementation(libs.kotlin.stdlib.jdk8)
   implementation(libs.kotlin.reflect)
-  implementation(libs.kotlinx.coroutines.play.services)
+  "gmsImplementation"(libs.kotlinx.coroutines.play.services)
   implementation(libs.kotlinx.coroutines.rx3)
   implementation(libs.jackson.module.kotlin)
   implementation(libs.rxjava3.rxandroid)
   implementation(libs.rxjava3.rxkotlin)
   implementation(libs.rxdogtag)
   implementation(libs.androidx.credentials)
-  implementation(libs.androidx.credentials.compat)
+  "gmsImplementation"(libs.androidx.credentials.compat)
 
   "playImplementation"(project(":billing"))
   "nightlyImplementation"(project(":billing"))
