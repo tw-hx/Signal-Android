@@ -1,0 +1,8 @@
+plugins {
+    id 'signal-library'
+}
+
+dependencies {
+    implementation libs.androidx.preference
+    implementation libs.osmdroid
+}
