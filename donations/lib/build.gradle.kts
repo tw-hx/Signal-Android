@@ -13,6 +13,18 @@ android {
   defaultConfig {
     vectorDrawables.useSupportLibrary = true
   }
+
+  flavorDimensions += listOf("gms")
+  productFlavors {
+    create("gms") {
+      dimension = "gms"
+      isDefault = true
+    }
+
+    create("foss") {
+      dimension = "gms"
+    }
+  }
 }
 
 dependencies {
@@ -26,6 +38,7 @@ dependencies {
     exclude(group = "com.google.protobuf", module = "protobuf-java")
   }
 
-  api(libs.google.play.services.wallet)
+  "gmsApi"(libs.google.play.services.wallet)
+  "fossApi"(project(":libfakegms"))
   api(libs.square.okhttp3)
 }
