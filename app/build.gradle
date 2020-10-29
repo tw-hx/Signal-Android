@@ -77,7 +77,7 @@ android {
     buildToolsVersion BUILD_TOOL_VERSION
     compileSdkVersion COMPILE_SDK
 
-    flavorDimensions 'distribution', 'environment'
+    flavorDimensions 'distribution', 'gms', 'environment'
     useLibrary 'org.apache.http.legacy'
 
     dexOptions {
@@ -237,6 +237,16 @@ android {
             buildConfigField "String", "NOPLAY_UPDATE_URL", "\"$ext.websiteUpdateUrl\""
         }
 
+        gms {
+            dimension 'gms'
+            isDefault true
+            buildConfigField "boolean", "USE_OSM", "false"
+        }
+        foss {
+            dimension 'gms'
+            buildConfigField "boolean", "USE_OSM", "true"
+        }
+
         internal {
             dimension 'distribution'
             ext.websiteUpdateUrl = "null"
@@ -311,6 +321,7 @@ android {
         abortOnError true
         baseline file("lint-baseline.xml")
         disable "LintError"
+        disable "Instantiatable" //FIXME - libfakegms
     }
 
     testOptions {
@@ -351,14 +362,17 @@ dependencies {
     implementation "androidx.autofill:autofill:1.0.0"
     implementation "androidx.biometric:biometric:1.1.0"
 
-    implementation ('com.google.firebase:firebase-messaging:20.2.0') {
+    gmsImplementation ('com.google.firebase:firebase-messaging:20.2.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
     }
 
-    implementation 'com.google.android.gms:play-services-maps:16.1.0'
-    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+    gmsImplementation 'com.google.android.gms:play-services-maps:16.1.0'
+    gmsImplementation 'com.google.android.gms:play-services-auth:16.0.1'
+
+    fossImplementation project(':libfakegms')
+    fossImplementation 'org.osmdroid:osmdroid-android:6.1.8'
 
     implementation 'com.google.android.exoplayer:exoplayer-core:2.9.1'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.9.1'
@@ -457,7 +471,7 @@ dependencies {
 }
 
 dependencyVerification {
-    configuration = '(play|website)(Prod|Staging)(Debug|Release)RuntimeClasspath'
+    configuration = 'playGms(Prod|Staging)(Debug|Release)RuntimeClasspath'
 }
 
 def assembleWebsiteDescriptor = { variant, file ->
