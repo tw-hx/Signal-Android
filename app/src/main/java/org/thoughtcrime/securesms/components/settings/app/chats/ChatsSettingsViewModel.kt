@@ -32,10 +32,10 @@ class ChatsSettingsViewModel @JvmOverloads constructor(
       folderCount = 0,
       userUnregistered = TextSecurePreferences.isUnauthorizedReceived(AppDependencies.application) || !SignalStore.account.isRegistered,
       clientDeprecated = SignalStore.misc.isClientDeprecated
-      // AT: added
+      // AT+JW: added
       ,
-      keepViewOnceMessages = SignalStore.settings.isKeepViewOnceMessages,
       keepExpiringMessages = SignalStore.settings.isKeepExpiringMessages,
+      keepViewOnceMessages = SignalStore.settings.isKeepViewOnceMessages,
       ignoreRemoteDelete = SignalStore.settings.isIgnoreRemoteDelete,
       deleteMediaOnly = SignalStore.settings.isDeleteMediaOnly
     )
