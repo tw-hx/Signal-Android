@@ -77,7 +77,7 @@ android {
     buildToolsVersion = signalBuildToolsVersion
     compileSdkVersion = signalCompileSdkVersion
 
-    flavorDimensions 'distribution', 'environment'
+    flavorDimensions 'distribution', 'gms', 'environment'
     useLibrary 'org.apache.http.legacy'
     testBuildType 'instrumentation'
 
@@ -352,6 +352,17 @@ android {
             buildConfigField "String", "BUILD_ENVIRONMENT_TYPE", "\"Prod\""
         }
 
+        gms {
+            dimension 'gms'
+            isDefault true
+            buildConfigField "boolean", "USE_OSM", "false"
+        }
+        foss {
+            dimension 'gms'
+            buildConfigField "boolean", "USE_OSM", "true"
+        }
+
+
         staging {
             dimension 'environment'
 
@@ -422,7 +433,7 @@ android {
 
     android.variantFilter { variant ->
         def distribution = variant.getFlavors().get(0).name
-        def environment  = variant.getFlavors().get(1).name
+        def environment  = variant.getFlavors().get(2).name
         def buildType    = variant.buildType.name
         def fullName     = distribution + environment.capitalize() + buildType.capitalize()
 
@@ -484,14 +495,17 @@ dependencies {
     implementation libs.androidx.asynclayoutinflater
     implementation libs.androidx.asynclayoutinflater.appcompat
 
-    implementation (libs.firebase.messaging) {
+    gmsImplementation (libs.firebase.messaging) {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
     }
 
-    implementation libs.google.play.services.maps
-    implementation libs.google.play.services.auth
+    gmsImplementation libs.google.play.services.maps
+    gmsImplementation libs.google.play.services.auth
+
+    fossImplementation project(':libfakegms')
+    fossImplementation libs.osmdroid
 
     implementation libs.bundles.media3
 
@@ -506,6 +520,7 @@ dependencies {
     implementation project(':device-transfer')
     implementation project(':image-editor')
     implementation project(':donations')
+    gmsImplementation libs.google.play.services.wallet /* Hack for 5.24.17+ to pass donations dependency verification */
     implementation project(':contacts')
     implementation project(':qr')
     implementation project(':sms-exporter')
