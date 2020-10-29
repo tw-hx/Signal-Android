@@ -1,0 +1,78 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'witness'
+apply from: 'witness-verifications.gradle'
+
+repositories {
+    google()
+    mavenCentral()
+    jcenter()
+}
+
+android {
+    flavorDimensions 'distribution', 'gms', 'environment'
+    buildToolsVersion BUILD_TOOL_VERSION
+    compileSdkVersion COMPILE_SDK
+
+    defaultConfig {
+        minSdkVersion MINIMUM_SDK
+        targetSdkVersion TARGET_SDK
+    }
+
+    compileOptions {
+        sourceCompatibility JAVA_VERSION
+        targetCompatibility JAVA_VERSION
+    }
+
+    buildTypes {
+        debug {}
+        flipper {}
+        release {}
+        perf {}
+        mock {}
+    }
+    productFlavors {
+        play {
+            dimension 'distribution'
+        }
+        website {
+           dimension 'distribution'
+        }
+        gms {
+            dimension 'gms'
+        }
+        foss {
+            dimension 'gms'
+        }
+        internal {
+           dimension 'distribution'
+        }
+        study {
+           dimension 'distribution'
+        }
+        prod {
+            dimension 'environment'
+        }
+        staging {
+            dimension 'environment'
+        }
+        
+    }
+}
+
+configurations {
+    compileClasspath
+}
+
+dependencies {
+    implementation 'androidx.fragment:fragment:1.1.0'
+    implementation 'androidx.preference:preference:1.0.0'
+    implementation 'org.osmdroid:osmdroid-android:6.1.8'
+}
