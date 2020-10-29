@@ -14,6 +14,17 @@ android {
         multiDexEnabled true
     }
 
+    flavorDimensions 'gms'
+    productFlavors {
+      gms {
+        dimension 'gms'
+        isDefault true
+      }
+      foss {
+        dimension 'gms'
+      }
+    }
+
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JAVA_VERSION
@@ -40,7 +51,8 @@ dependencies {
     implementation libs.androidx.annotation
     implementation libs.androidx.appcompat
 
-    api libs.google.play.services.wallet
+    gmsApi libs.google.play.services.wallet
+    fossApi project(':libfakegms')
     api libs.square.okhttp3
     api libs.rxjava3.rxjava
 }
