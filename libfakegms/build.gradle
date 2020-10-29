@@ -1,0 +1,67 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.3'
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'witness'
+apply from: 'witness-verifications.gradle'
+
+repositories {
+    google()
+    mavenCentral()
+    jcenter()
+}
+
+android {
+    flavorDimensions "none", "gms"
+    compileSdkVersion 29
+    buildToolsVersion '29.0.3'
+
+    defaultConfig {
+        minSdkVersion 19
+    }
+
+    buildTypes {
+        debug {}
+        staging {}
+        flipper {}
+        release {}
+    }
+    productFlavors {
+        gms {
+            dimension "gms"
+        }
+        foss {
+            dimension "gms"
+        }
+        play {
+            dimension "none"
+        }
+        website {
+           dimension "none"
+        }
+        internal {
+           dimension "none"
+        }
+    }
+
+//    variantFilter { variant ->
+//        if (!name.contains('foss')) setIgnore(true)
+//    }
+}
+
+
+configurations {
+    compileClasspath
+}
+
+dependencies {
+    implementation 'androidx.fragment:fragment:1.1.0'
+}

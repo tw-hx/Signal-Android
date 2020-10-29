@@ -91,7 +91,7 @@ def abiPostFix = ['universal'   : 0,
                   'x86_64'      : 4]
 
 android {
-    flavorDimensions "none"
+    flavorDimensions "none", "gms"
     compileSdkVersion 29
     buildToolsVersion '29.0.3'
     useLibrary 'org.apache.http.legacy'
@@ -233,6 +233,13 @@ android {
     }
 
     productFlavors {
+        gms {
+            dimension "gms"
+        }
+        foss {
+            dimension "gms"
+        }
+
         play {
             dimension "none"
             ext.websiteUpdateUrl = "null"
@@ -308,17 +315,19 @@ dependencies {
     implementation "androidx.autofill:autofill:1.0.0"
     implementation "androidx.paging:paging-common:2.1.2"
     implementation "androidx.paging:paging-runtime:2.1.2"
-    implementation 'com.google.firebase:firebase-ml-vision:24.0.3'
-    implementation 'com.google.firebase:firebase-ml-vision-face-model:20.0.1'
+    gmsImplementation 'com.google.firebase:firebase-ml-vision:24.0.3'
+    gmsImplementation 'com.google.firebase:firebase-ml-vision-face-model:20.0.1'
 
-    implementation ('com.google.firebase:firebase-messaging:20.2.0') {
+    gmsImplementation ('com.google.firebase:firebase-messaging:20.2.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
     }
 
-    implementation 'com.google.android.gms:play-services-maps:16.1.0'
-    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+    gmsImplementation 'com.google.android.gms:play-services-maps:16.1.0'
+    gmsImplementation 'com.google.android.gms:play-services-auth:16.0.1'
+
+    fossImplementation project(':libfakegms')
 
     implementation 'com.google.android.exoplayer:exoplayer-core:2.9.1'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.9.1'
@@ -404,7 +413,7 @@ dependencies {
 }
 
 dependencyVerification {
-    configuration = '(play|website)(Debug|Release)RuntimeClasspath'
+    configuration = 'playGms(Debug|Release)RuntimeClasspath'
 }
 
 
