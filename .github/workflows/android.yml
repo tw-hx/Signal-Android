@@ -1,19 +1,18 @@
 name: Android CI
 
 on:
-  pull_request:
   push:
     branches:
-    - 'main'
-    - '7.**'
+    - '*-FOSS'
+  workflow_dispatch:
 
 permissions:
-  contents: read # to fetch code (actions/checkout)
+  contents: write # to fetch code (actions/checkout) then release/upload.
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest-8-cores
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -27,11 +26,72 @@ jobs:
         java-version: 17
         cache: gradle
 
+    - name: Install NDK
+      run: |
+          # To strip JNI libs, Signal requires specific version
+          ndk_ver=$( grep signalNdkVersion constants.gradle.kts | grep -Po "[\d\.]+" )
+          echo "y" | ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "ndk;${ndk_ver}"
+
+    - name: Enlarge swapfile
+      run: |
+          export SWAP_FILE=$(swapon --show=NAME | tail -n 1)
+          sudo swapoff $SWAP_FILE
+          sudo rm $SWAP_FILE
+          sudo fallocate -l 8192M $SWAP_FILE
+          sudo chmod 600 $SWAP_FILE
+          sudo mkswap $SWAP_FILE
+          sudo swapon $SWAP_FILE
+
     - name: Validate Gradle Wrapper
       uses: gradle/actions/wrapper-validation@v5
 
     - name: Build with Gradle
-      run: ./gradlew qa
+      run: ./gradlew assembleWebsiteFossProdRelease
+
+    - name: Get version
+      id: get-version
+      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/heads/}
+
+    - name: Sign APKs
+      env:
+        # If you want to generate a keystore secret, run these commands:
+        # keytool -genkey -v -keystore apksign.keystore -alias apksign -keyalg RSA -keysize 4096
+        # cat apksign.keystore | base64
+        KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+      run: |
+        echo "${KEYSTORE_BASE64}" | base64 -d > apksign.keystore
+        for apk in app/build/outputs/apk/websiteFossProd/release/*-unsigned-*.apk; do
+        out=${apk/-unsigned-/-signed-}
+        ${ANDROID_HOME}/build-tools/34.0.0/apksigner sign --ks apksign.keystore --ks-pass env:KEYSTORE_PASS --out "${out}" "${apk}"
+        echo "$(sha256sum ${out})"
+        done
+        rm apksign.keystore
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: "v${{ steps.get-version.outputs.VERSION }}"
+        release_name: "Signal ${{ steps.get-version.outputs.VERSION }}"
+        draft: false
+        prerelease: false
+
+    - name: Get Universal APK Filename
+      id: get-universal-filename
+      run: echo ::set-output name=FILENAME::$(basename $(ls -1 app/build/outputs/apk/websiteFossProd/release/*-universal-*-signed-*.apk) )
+
+    - name: Upload Universal APK
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: "app/build/outputs/apk/websiteFossProd/release/${{ steps.get-universal-filename.outputs.FILENAME }}"
+        asset_name: ${{ steps.get-universal-filename.outputs.FILENAME }}
+        asset_content_type: application/vnd.android.package-archive
 
     - name: Archive reports for failed build
       if: ${{ failure() }}
