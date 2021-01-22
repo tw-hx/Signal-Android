@@ -83,6 +83,13 @@ class SettingsValues internal constructor(store: KeyValueStore, context: Context
 
     const val BACKUP_DEFAULT_HOUR = 2
     const val BACKUP_DEFAULT_MINUTE = 0
+
+    // AT: added -------
+    const val KEEP_EXPIRING_MESSAGES = "settings.keep.expiring.messages"
+    const val KEEP_VIEW_ONCE_MESSAGES = "settings.keep.view.once.messages"
+    const val IGNORE_REMOTE_DELETE = "settings.ignore.remote.delete"
+    const val DELETE_MEDIA_ONLY = "settings.delete.media.only"
+    // AT: end added ---
   }
 
   private val configurationSettingChanged = SingleLiveEvent<String>()
@@ -240,6 +247,34 @@ class SettingsValues internal constructor(store: KeyValueStore, context: Context
     set(value) {
       putBoolean(ENTER_KEY_SENDS, value)
     }
+
+  // AT: added ------
+
+  var isKeepExpiringMessages: Boolean
+    get() = getBoolean(KEEP_EXPIRING_MESSAGES, false)
+    set(value) {
+      putBoolean(KEEP_EXPIRING_MESSAGES, value)
+    }
+
+  var isKeepViewOnceMessages: Boolean
+    get() = getBoolean(KEEP_VIEW_ONCE_MESSAGES, false)
+    set(value) {
+      putBoolean(KEEP_VIEW_ONCE_MESSAGES, value)
+    }
+
+  var isIgnoreRemoteDelete: Boolean
+    get() = getBoolean(IGNORE_REMOTE_DELETE, false)
+    set(value) {
+      putBoolean(IGNORE_REMOTE_DELETE, value)
+    }
+
+  var isDeleteMediaOnly: Boolean
+    get() = getBoolean(DELETE_MEDIA_ONLY, false)
+    set(value) {
+      putBoolean(DELETE_MEDIA_ONLY, value)
+    }
+
+  // AT: end added ---
 
   var isBackupEnabled: Boolean
     get() = getBoolean(BACKUPS_ENABLED, TextSecurePreferences.isBackupEnabled(AppDependencies.application))
