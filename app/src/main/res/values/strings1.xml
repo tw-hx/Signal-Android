@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Keep messages -->
+  <string name="preferences_chats__control_message_deletion">Control message deletion</string>
+  <string name="preferences_chats__keep_view_once_messages">Keep view-once media</string>
+  <string name="preferences_chats__keep_view_once_messages_summary">When checked incoming view-once media will be treated as normal view-always media and will not be deleted after view</string>
+  <string name="preferences_chats__keep_expiring_messages">Keep expiring messages</string>
+  <string name="preferences_chats__keep_expiring_messages_summary">When checked incoming expiring messages will be treated as normal messages</string>
+  <string name="preferences_chats__ignore_remote_delete">Ignore remote delete</string>
+  <string name="preferences_chats__ignore_remote_delete_summary">When checked, this option prevents the remote deletion of messages by the sender</string>
+  <string name="preferences_chats__delete_media_only">Delete media only</string>
+  <string name="preferences_chats__delete_media_only_summary">Delete only media, not the message itself, when media is deleted in the All media screen</string>
+</resources>
