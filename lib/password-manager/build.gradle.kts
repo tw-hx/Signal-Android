@@ -12,6 +12,14 @@ android {
   }
 }
 
+androidComponents {
+  beforeVariants { variant ->
+    val sptr = gradle.startParameter.taskRequests.toString()
+    if (variant.name.lowercase().contains("foss")) variant.enable = sptr.contains("Foss")
+    else if (variant.name.lowercase().contains("gms")) variant.enable = sptr.contains("Gms")
+  }
+}
+
 dependencies {
   lintChecks(project(":lintchecks"))
 

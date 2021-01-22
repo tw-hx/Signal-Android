@@ -41,6 +41,14 @@ sealed interface ChatsSettingsEvents {
 
   data class EnterKeySendsChanged(val enabled: Boolean) : ChatsSettingsEvents
 
+  data class KeepExpiringMessagesChanged(val enabled: Boolean) : ChatsSettingsEvents
+
+  data class KeepViewOnceMessagesChanged(val enabled: Boolean) : ChatsSettingsEvents
+
+  data class IgnoreRemoteDeleteChanged(val enabled: Boolean) : ChatsSettingsEvents
+
+  data class DeleteMediaOnlyChanged(val enabled: Boolean) : ChatsSettingsEvents
+
   /**
    * User got past their screen lock after asking to export their chat history.
    */
