@@ -116,6 +116,24 @@ class ChatsSettingsFragment : ComposeFragment() {
     }
 
     // endregion
+
+    // AT: added --------------------------------------------------------------
+    override fun onKeepExpiringMessagesChanged(enabled: Boolean) {
+      viewModel.setKeepExpiringMessages(enabled)
+    }
+
+    // JW: added --------------------------------------------------------------
+    override fun onKeepViewOnceMessagesChanged(enabled: Boolean) {
+      viewModel.setKeepViewOnceMessages(enabled)
+    }
+
+    override fun onIgnoreRemoteDeleteChanged(enabled: Boolean) {
+      viewModel.setIgnoreRemoteDelete(enabled)
+    }
+    
+    override fun onDeleteMediaOnlyChanged(enabled: Boolean) {
+      viewModel.setDeleteMediaOnly(enabled)
+    }
   }
 }
 
@@ -132,6 +150,13 @@ private interface ChatsSettingsCallbacks : ChatExportCallbacks {
   fun onCancelInFlightExport() = Unit
 
   object Empty : ChatsSettingsCallbacks, ChatExportCallbacks by ChatExportCallbacks.Empty
+
+  // AT: added
+  fun onKeepExpiringMessagesChanged(enabled: Boolean) = Unit
+  // JW: added
+  fun onKeepViewOnceMessagesChanged(enabled: Boolean) = Unit
+  fun onIgnoreRemoteDeleteChanged(enabled: Boolean) = Unit
+  fun onDeleteMediaOnlyChanged(enabled: Boolean) = Unit
 }
 
 @Composable
@@ -276,6 +301,51 @@ private fun ChatsSettingsScreen(
           onCheckChanged = callbacks::onEnterKeySendsChanged
         )
       }
+
+      // JW/AT: added
+      item {
+        Dividers.Default()
+      }
+
+      item {
+        Texts.SectionHeader(stringResource(R.string.preferences_chats__control_message_deletion))
+      }
+
+      item {
+        Rows.ToggleRow(
+          text = stringResource(R.string.preferences_chats__keep_expiring_messages),
+          label = stringResource(R.string.preferences_chats__keep_expiring_messages_summary),
+          checked = state.keepExpiringMessages,
+          onCheckChanged = callbacks::onKeepExpiringMessagesChanged
+        )
+      }
+
+      item {
+        Rows.ToggleRow(
+          text = stringResource(R.string.preferences_chats__keep_view_once_messages),
+          label = stringResource(R.string.preferences_chats__keep_view_once_messages_summary),
+          checked = state.keepViewOnceMessages,
+          onCheckChanged = callbacks::onKeepViewOnceMessagesChanged
+        )
+      }
+
+      item {
+        Rows.ToggleRow(
+          text = stringResource(R.string.preferences_chats__ignore_remote_delete),
+          label = stringResource(R.string.preferences_chats__ignore_remote_delete_summary),
+          checked = state.ignoreRemoteDelete,
+          onCheckChanged = callbacks::onIgnoreRemoteDeleteChanged
+        )
+      }
+
+      item {
+        Rows.ToggleRow(
+          text = stringResource(R.string.preferences_chats__delete_media_only),
+          label = stringResource(R.string.preferences_chats__delete_media_only_summary),
+          checked = state.deleteMediaOnly,
+          onCheckChanged = callbacks::onDeleteMediaOnlyChanged
+        )
+      }
     }
   }
 
@@ -304,6 +374,12 @@ private fun ChatsSettingsScreenPreview() {
         clientDeprecated = false,
         isPlaintextExportEnabled = true,
         plaintextExportProgress = LocalBackupCreationProgress(idle = LocalBackupCreationProgress.Idle())
+        // AT/JW: added
+        ,
+        keepExpiringMessages = false,
+        keepViewOnceMessages = false,
+        ignoreRemoteDelete = false,
+        deleteMediaOnly = false
       ),
       callbacks = ChatsSettingsCallbacks.Empty
     )

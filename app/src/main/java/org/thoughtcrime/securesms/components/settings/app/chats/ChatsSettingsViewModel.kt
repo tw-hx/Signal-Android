@@ -38,6 +38,12 @@ class ChatsSettingsViewModel @JvmOverloads constructor(
       clientDeprecated = SignalStore.misc.isClientDeprecated,
       isPlaintextExportEnabled = RemoteConfig.localPlaintextExport,
       chatExportState = ChatExportState.None
+      // AT: added
+      ,
+      keepViewOnceMessages = SignalStore.settings.isKeepViewOnceMessages,
+      keepExpiringMessages = SignalStore.settings.isKeepExpiringMessages,
+      ignoreRemoteDelete = SignalStore.settings.isIgnoreRemoteDelete,
+      deleteMediaOnly = SignalStore.settings.isDeleteMediaOnly
     )
   )
 
@@ -132,4 +138,29 @@ class ChatsSettingsViewModel @JvmOverloads constructor(
       }
     }
   }
+
+  // AT: added
+  fun setKeepExpiringMessages(enabled: Boolean) {
+    store.update { it.copy(keepExpiringMessages = enabled) }
+    SignalStore.settings.isKeepExpiringMessages = enabled
+  }
+
+  // AT: added
+  fun setKeepViewOnceMessages(enabled: Boolean) {
+    store.update { it.copy(keepViewOnceMessages = enabled) }
+    SignalStore.settings.isKeepViewOnceMessages = enabled
+  }
+
+  // AT: added
+  fun setIgnoreRemoteDelete(enabled: Boolean) {
+    store.update { it.copy(ignoreRemoteDelete = enabled) }
+    SignalStore.settings.isIgnoreRemoteDelete = enabled
+  }
+
+  // AT: added
+  fun setDeleteMediaOnly(enabled: Boolean) {
+    store.update { it.copy(deleteMediaOnly = enabled) }
+    SignalStore.settings.isDeleteMediaOnly = enabled
+  }
+
 }
