@@ -17,6 +17,12 @@ data class ChatsSettingsState(
   val plaintextExportProgress: LocalBackupCreationProgress = LocalExportProgress.plaintextProgress.value,
   val chatExportState: ChatExportState = ChatExportState.None,
   val includeMediaInExport: Boolean = false
+  // AT+JW: added extra preferences
+  ,
+  val keepExpiringMessages: Boolean,
+  val keepViewOnceMessages: Boolean,
+  val ignoreRemoteDelete: Boolean,
+  val deleteMediaOnly: Boolean
 ) {
   fun isRegisteredAndUpToDate(): Boolean {
     return !userUnregistered && !clientDeprecated
