@@ -10,6 +10,12 @@ data class ChatsSettingsState(
   val folderCount: Int,
   val userUnregistered: Boolean,
   val clientDeprecated: Boolean
+  // AT+JW: added extra preferences
+  ,
+  val keepExpiringMessages: Boolean,
+  val keepViewOnceMessages: Boolean,
+  val ignoreRemoteDelete: Boolean,
+  val deleteMediaOnly: Boolean
 ) {
   fun isRegisteredAndUpToDate(): Boolean {
     return !userUnregistered && !clientDeprecated
