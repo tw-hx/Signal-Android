@@ -74,6 +74,13 @@ public final class SettingsValues extends SignalStoreValues {
   public static final int BACKUP_DEFAULT_HOUR   = 2;
   public static final int BACKUP_DEFAULT_MINUTE = 0;
 
+  // AT: added -------
+  public static final String KEEP_VIEW_ONCE_MESSAGES                 = "settings.keep.view.once.messages";
+  public static final String KEEP_EXPIRING_MESSAGES                  = "settings.keep.expiring.messages";
+  public static final String IGNORE_REMOTE_DELETE                    = "settings.ignore.remote.delete";
+  public static final String DELETE_MEDIA_ONLY                       = "settings.delete.media.only";
+  // AT: end added ---
+
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
   SettingsValues(@NonNull KeyValueStore store) {
@@ -285,6 +292,42 @@ public final class SettingsValues extends SignalStoreValues {
     putInteger(BACKUPS_SCHEDULE_HOUR, hour);
     putInteger(BACKUPS_SCHEDULE_MINUTE, minute);
   }
+
+  // AT: added ------
+
+  public boolean isKeepViewOnceMessages() {
+    return getBoolean(KEEP_VIEW_ONCE_MESSAGES, false);
+  }
+
+  public void setKeepViewOnceMessages(boolean keepViewOnceMessages) {
+    putBoolean(KEEP_VIEW_ONCE_MESSAGES, keepViewOnceMessages);
+  }
+
+  public boolean isKeepExpiringMessages() {
+    return getBoolean(KEEP_EXPIRING_MESSAGES, false);
+  }
+
+  public void setKeepExpiringMessages(boolean keepExpiringMessages) {
+    putBoolean(KEEP_EXPIRING_MESSAGES, keepExpiringMessages);
+  }
+
+  public boolean isIgnoreRemoteDelete() {
+    return getBoolean(IGNORE_REMOTE_DELETE, false);
+  }
+
+  public void setIgnoreRemoteDelete(boolean ignoreRemoteDelete) {
+    putBoolean(IGNORE_REMOTE_DELETE, ignoreRemoteDelete);
+  }
+
+  public boolean isDeleteMediaOnly() {
+    return getBoolean(DELETE_MEDIA_ONLY, false);
+  }
+
+  public void setDeleteMediaOnly(boolean deleteMediaOnly) {
+    putBoolean(DELETE_MEDIA_ONLY, deleteMediaOnly);
+  }
+
+  // AT: end added ---
 
   public boolean isSmsDeliveryReportsEnabled() {
     return getBoolean(SMS_DELIVERY_REPORTS_ENABLED, TextSecurePreferences.isSmsDeliveryReportsEnabled(ApplicationDependencies.getApplication()));

@@ -7,4 +7,10 @@ data class ChatsSettingsState(
   val useSystemEmoji: Boolean,
   val enterKeySends: Boolean,
   val chatBackupsEnabled: Boolean
+  // JW: added extra preferences
+  ,
+  val keepViewOnceMessages: Boolean,
+  val keepExpiringMessages: Boolean,
+  val ignoreRemoteDelete: Boolean,
+  val deleteMediaOnly: Boolean
 )

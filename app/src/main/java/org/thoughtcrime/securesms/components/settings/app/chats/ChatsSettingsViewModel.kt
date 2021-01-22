@@ -23,6 +23,12 @@ class ChatsSettingsViewModel @JvmOverloads constructor(
       useSystemEmoji = SignalStore.settings().isPreferSystemEmoji,
       enterKeySends = SignalStore.settings().isEnterKeySends,
       chatBackupsEnabled = SignalStore.settings().isBackupEnabled && BackupUtil.canUserAccessBackupDirectory(ApplicationDependencies.getApplication())
+      // AT: added
+      ,
+      keepViewOnceMessages = SignalStore.settings().isKeepViewOnceMessages,
+      keepExpiringMessages = SignalStore.settings().isKeepExpiringMessages,
+      ignoreRemoteDelete = SignalStore.settings().isIgnoreRemoteDelete,
+      deleteMediaOnly = SignalStore.settings().isDeleteMediaOnly
     )
   )
 
@@ -63,4 +69,29 @@ class ChatsSettingsViewModel @JvmOverloads constructor(
       store.update { it.copy(chatBackupsEnabled = backupsEnabled) }
     }
   }
+
+  // AT: added
+  fun setKeepViewOnceMessages(enabled: Boolean) {
+    store.update { it.copy(keepViewOnceMessages = enabled) }
+    SignalStore.settings().isKeepViewOnceMessages = enabled
+  }
+
+  // AT: added
+  fun setKeepExpiringMessages(enabled: Boolean) {
+    store.update { it.copy(keepExpiringMessages = enabled) }
+    SignalStore.settings().isKeepExpiringMessages = enabled
+  }
+
+  // AT: added
+  fun setIgnoreRemoteDelete(enabled: Boolean) {
+    store.update { it.copy(ignoreRemoteDelete = enabled) }
+    SignalStore.settings().isIgnoreRemoteDelete = enabled
+  }
+
+  // AT: added
+  fun setDeleteMediaOnly(enabled: Boolean) {
+    store.update { it.copy(deleteMediaOnly = enabled) }
+    SignalStore.settings().isDeleteMediaOnly = enabled
+  }
+
 }

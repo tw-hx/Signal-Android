@@ -88,6 +88,50 @@ class ChatsSettingsFragment : DSLSettingsFragment(R.string.preferences_chats__ch
           Navigation.findNavController(requireView()).safeNavigate(R.id.action_chatsSettingsFragment_to_backupsPreferenceFragment)
         }
       )
+
+      dividerPref()
+
+      sectionHeaderPref(R.string.preferences_chats__control_message_deletion)
+
+      // JW: added
+      switchPref(
+        title = DSLSettingsText.from(R.string.preferences_chats__keep_view_once_messages),
+        summary = DSLSettingsText.from(R.string.preferences_chats__keep_view_once_messages_summary),
+        isChecked = state.keepViewOnceMessages,
+        onClick = {
+          viewModel.setKeepViewOnceMessages(!state.keepViewOnceMessages)
+        }
+      )
+
+      // AT: added
+      switchPref(
+        title = DSLSettingsText.from(R.string.preferences_chats__keep_expiring_messages),
+        summary = DSLSettingsText.from(R.string.preferences_chats__keep_expiring_messages_summary),
+        isChecked = state.keepExpiringMessages,
+        onClick = {
+          viewModel.setKeepExpiringMessages(!state.keepExpiringMessages)
+        }
+      )
+
+      // JW: added
+      switchPref(
+        title = DSLSettingsText.from(R.string.preferences_chats__ignore_remote_delete),
+        summary = DSLSettingsText.from(R.string.preferences_chats__ignore_remote_delete_summary),
+        isChecked = state.ignoreRemoteDelete,
+        onClick = {
+          viewModel.setIgnoreRemoteDelete(!state.ignoreRemoteDelete)
+        }
+      )
+
+      // JW: added
+      switchPref(
+        title = DSLSettingsText.from(R.string.preferences_chats__delete_media_only),
+        summary = DSLSettingsText.from(R.string.preferences_chats__delete_media_only_summary),
+        isChecked = state.deleteMediaOnly,
+        onClick = {
+          viewModel.setDeleteMediaOnly(!state.deleteMediaOnly)
+        }
+      )
     }
   }
 }
