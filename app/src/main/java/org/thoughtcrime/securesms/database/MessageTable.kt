@@ -5775,4 +5775,15 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       }
     }
   }
+
+  // JW: Deletes only the attachment for the message, not the message itself.
+  fun deleteAttachmentsOnly(messageId: Long): Boolean {
+    val threadId = getThreadIdForMessage(messageId)
+    val attachmentTable = SignalDatabase.attachments
+    attachmentTable.deleteAttachmentsForMessage(messageId)
+    notifyConversationListeners(threadId)
+    OptimizeMessageSearchIndexJob.enqueue()
+    return true
+  }
+
 }
