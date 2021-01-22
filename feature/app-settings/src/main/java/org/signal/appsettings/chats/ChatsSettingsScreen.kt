@@ -217,6 +217,52 @@ fun ChatsSettingsScreen(
           onCheckChanged = { onEvent(ChatsSettingsEvents.EnterKeySendsChanged(it)) }
         )
       }
+
+      // JW/AT: added
+      item {
+        Dividers.Default()
+      }
+
+      item {
+        Texts.SectionHeader(stringResource(R.string.ChatsSettingsFragment__control_message_deletion))
+      }
+
+      item {
+        Rows.ToggleRow(
+          text = stringResource(R.string.ChatsSettingsFragment__keep_expiring_messages),
+          label = stringResource(R.string.ChatsSettingsFragment__keep_expiring_messages_summary),
+          checked = state.keepExpiringMessages,
+          onCheckChanged = { onEvent(ChatsSettingsEvents.KeepExpiringMessagesChanged(it)) }
+        )
+      }
+
+      item {
+        Rows.ToggleRow(
+          text = stringResource(R.string.ChatsSettingsFragment__keep_view_once_messages),
+          label = stringResource(R.string.ChatsSettingsFragment__keep_view_once_messages_summary),
+          checked = state.keepViewOnceMessages,
+          onCheckChanged = { onEvent(ChatsSettingsEvents.KeepViewOnceMessagesChanged(it)) }
+        )
+      }
+
+      item {
+        Rows.ToggleRow(
+          text = stringResource(R.string.ChatsSettingsFragment__ignore_remote_delete),
+          label = stringResource(R.string.ChatsSettingsFragment__ignore_remote_delete_summary),
+          checked = state.ignoreRemoteDelete,
+          onCheckChanged = { onEvent(ChatsSettingsEvents.IgnoreRemoteDeleteChanged(it)) }
+        )
+      }
+
+      item {
+        Rows.ToggleRow(
+          text = stringResource(R.string.ChatsSettingsFragment__delete_media_only),
+          label = stringResource(R.string.ChatsSettingsFragment__delete_media_only_summary),
+          checked = state.deleteMediaOnly,
+          onCheckChanged = { onEvent(ChatsSettingsEvents.DeleteMediaOnlyChanged(it)) }
+        )
+      }
+
     }
   }
 
@@ -250,4 +296,10 @@ internal val chatsSettingsPreviewState = ChatsSettingsState(
   clientDeprecated = false,
   isPlaintextExportEnabled = true,
   plaintextExportProgress = BackupCreationProgress.Idle
+  // AT/JW: added
+  ,
+  keepExpiringMessages = false,
+  keepViewOnceMessages = false,
+  ignoreRemoteDelete = false,
+  deleteMediaOnly = false
 )

@@ -83,6 +83,32 @@ object ChatsSettingsRepository {
     AppDependencies.jobManager.cancelAllInQueue(LocalBackupJob.PLAINTEXT_ARCHIVE_QUEUE)
   }
 
+  // AT: added
+  fun isKeepViewOnceMessages(): Boolean = SignalStore.settings.isKeepViewOnceMessages
+
+  fun setKeepViewOnceMessages(enabled: Boolean) {
+    SignalStore.settings.isKeepViewOnceMessages = enabled
+  }
+
+  fun isKeepExpiringMessages(): Boolean = SignalStore.settings.isKeepExpiringMessages
+
+  fun setKeepExpiringMessages(enabled: Boolean) {
+    SignalStore.settings.isKeepExpiringMessages = enabled
+  }
+
+  fun isIgnoreRemoteDelete(): Boolean = SignalStore.settings.isIgnoreRemoteDelete
+
+  fun setIgnoreRemoteDelete(enabled: Boolean) {
+    SignalStore.settings.isIgnoreRemoteDelete = enabled
+  }
+
+  fun isDeleteMediaOnly(): Boolean = SignalStore.settings.isDeleteMediaOnly
+
+  fun setDeleteMediaOnly(enabled: Boolean) {
+    SignalStore.settings.isDeleteMediaOnly = enabled
+  }
+  // AT: end added
+
   private fun syncLinkPreviewsState() {
     SignalExecutors.BOUNDED.execute {
       val isLinkPreviewsEnabled = SignalStore.settings.isLinkPreviewsEnabled
