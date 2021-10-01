@@ -64,7 +64,7 @@ public class SignalPlace {
     }
 
     if (BuildConfig.USE_OSM) {
-        description = "https://www.openstreetmap.org/#map=15/" + String.format("%s/%s", latitude, longitude);
+        description = "https://www.openstreetmap.org/?" + String.format( "mlat=%s&mlon=%s", latitude, longitude) + "#map=15/" + String.format("%s/%s", latitude, longitude);
     }
     else {
         description += Uri.parse(URL)
