@@ -221,18 +221,9 @@ android {
     buildConfigField("boolean", "MESSAGE_BACKUP_RESTORE_ENABLED", "false")
 
     ndk {
-      abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+      abiFilters += listOf("arm64-v8a")
     }
     resourceConfigurations += listOf()
-
-    splits {
-      abi {
-        isEnable = !project.hasProperty("generateBaselineProfile")
-        reset()
-        include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-        isUniversalApk = true
-      }
-    }
 
     testInstrumentationRunner = "org.thoughtcrime.securesms.testing.SignalTestRunner"
     testInstrumentationRunnerArguments["clearPackageData"] = "true"
