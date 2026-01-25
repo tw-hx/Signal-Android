@@ -119,6 +119,8 @@ gradle.projectsEvaluated {
 
   // If you let all of these things run in parallel, gradle will likely OOM.
   // To avoid this, we put non-app tests and lints behind the much heavier app tests and lints.
+
+  if (appTestTask != null ) // AT - dirty hack
   subprojects.filter { it.name != "Signal-Android" }.forEach { subproject ->
     appTestTask?.let { task ->
       subproject.tasks.findByName("testDebugUnitTest")?.mustRunAfter(task)
