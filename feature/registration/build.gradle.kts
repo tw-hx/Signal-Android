@@ -26,6 +26,18 @@ android {
   }
 
   experimentalProperties["android.experimental.enableScreenshotTest"] = true
+
+  flavorDimensions += listOf("gms")
+  productFlavors {
+    create("gms") {
+      dimension = "gms"
+      isDefault = true
+    }
+
+    create("foss") {
+      dimension = "gms"
+    }
+  }
 }
 
 screenshotTests {
@@ -85,7 +97,8 @@ dependencies {
   implementation(libs.google.libphonenumber)
 
   // Phone number hint
-  implementation(libs.google.play.services.auth)
+  "gmsImplementation"(libs.google.play.services.auth)
+  "fossImplementation"(project(":lib:fakegms"))
 
   // Testing
   testImplementation(testFixtures(project(":core:ui")))
