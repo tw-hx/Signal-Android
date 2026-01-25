@@ -84,7 +84,8 @@ tasks.register("ci") {
 }
 
 // Wire up QA dependencies after all projects are evaluated
-gradle.projectsEvaluated {
+// AT - dirty hack
+if (!gradle.startParameter.taskRequests.toString().contains("Foss") && !gradle.startParameter.taskRequests.toString().contains("Gms")) gradle.projectsEvaluated {
   val appTestTask = tasks.findByPath(":Signal-Android:testPlayProdDebugUnitTest")!!
   val appLintTask = tasks.findByPath(":Signal-Android:lintPlayProdDebug")!!
   val appCompileInstrumentationTask = tasks.findByPath(":Signal-Android:compilePlayProdDebugAndroidTestSources")
@@ -145,6 +146,7 @@ gradle.projectsEvaluated {
 
   // If you let all of these things run in parallel, gradle will likely OOM.
   // To avoid this, we put non-app tests and lints behind the much heavier app tests and lints.
+
   subprojects.filter { it.name != "Signal-Android" }.forEach { subproject ->
     appTestTask.let { task ->
       subproject.tasks.findByName("testDebugUnitTest")?.mustRunAfter(task)
