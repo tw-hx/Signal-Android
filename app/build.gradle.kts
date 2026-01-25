@@ -85,7 +85,8 @@ val selectableVariants = listOf(
   "playProdQuickstart",
   "playStagingQuickstart",
   "websiteProdSpinner",
-  "websiteProdRelease",
+  "websiteFossProdRelease",
+  "websiteGmsProdRelease",
   "githubProdSpinner",
   "githubProdRelease"
 )
@@ -159,7 +160,7 @@ android {
 
   ndkVersion = libs.versions.ndk.get()
 
-  flavorDimensions += listOf("distribution", "environment")
+  flavorDimensions += listOf("distribution", "gms", "environment")
 
   android.bundle.language.enableSplit = false
 
@@ -446,8 +447,10 @@ android {
     }
 
     create("website") {
+      val MAU = if (gradle.startParameter.taskRequests.toString().contains("Foss")) "false" else "true"
+
       dimension = "distribution"
-      buildConfigField("boolean", "MANAGES_APP_UPDATES", "true")
+      buildConfigField("boolean", "MANAGES_APP_UPDATES", "${MAU}")
       buildConfigField("String", "APK_UPDATE_MANIFEST_URL", "\"https://updates.signal.org/android/latest.json\"")
       buildConfigField("String", "BUILD_DISTRIBUTION_TYPE", "\"website\"")
     }
@@ -466,6 +469,17 @@ android {
       buildConfigField("String", "APK_UPDATE_MANIFEST_URL", "null")
       buildConfigField("String", "BUILD_DISTRIBUTION_TYPE", "\"nightly\"")
       buildConfigField("boolean", "LINK_DEVICE_UX_ENABLED", "true")
+    }
+
+    create("gms") {
+      dimension = "gms"
+      isDefault = true
+      buildConfigField("boolean", "USE_OSM", "false")
+    }
+
+    create("foss") {
+      dimension = "gms"
+      buildConfigField("boolean", "USE_OSM", "true")
     }
 
     create("prod") {
@@ -759,14 +773,16 @@ dependencies {
   implementation(libs.androidx.emoji2)
   implementation(libs.androidx.paging.runtime)
   implementation(libs.androidx.paging.compose)
-  implementation(libs.firebase.messaging) {
+  "gmsImplementation"(libs.firebase.messaging) {
     exclude(group = "com.google.firebase", module = "firebase-core")
     exclude(group = "com.google.firebase", module = "firebase-analytics")
     exclude(group = "com.google.firebase", module = "firebase-measurement-connector")
   }
-  implementation(libs.google.play.services.maps)
-  implementation(libs.google.play.services.auth)
-  implementation(libs.google.signin)
+  "gmsImplementation"(libs.google.play.services.maps)
+  "gmsImplementation"(libs.google.play.services.auth)
+  "gmsImplementation"(libs.google.signin)
+  "fossImplementation"(project(":lib:fakegms"))
+  "fossImplementation"(libs.osmdroid)
   implementation(libs.androidx.media)
   implementation(libs.bundles.media3)
   implementation(libs.conscrypt.android)
@@ -806,7 +822,7 @@ dependencies {
   implementation(libs.accompanist.drawablepainter)
   implementation(libs.kotlin.stdlib.jdk8)
   implementation(libs.kotlin.reflect)
-  implementation(libs.kotlinx.coroutines.play.services)
+  "gmsImplementation"(libs.kotlinx.coroutines.play.services)
   implementation(libs.kotlinx.coroutines.rx3)
   implementation(libs.jackson.module.kotlin)
   implementation(libs.rxjava3.rxandroid)
@@ -814,7 +830,8 @@ dependencies {
   implementation(libs.rxdogtag)
   implementation(libs.kotlinx.serialization.json)
 
-  implementation(project(":lib:billing"))
+  "gmsImplementation"(project(":lib:billing"))
+  "fossImplementation"(project(":lib:fakebilling"))
   implementation(project(":feature:media-send"))
 
   "spinnerImplementation"(project(":lib:spinner"))
