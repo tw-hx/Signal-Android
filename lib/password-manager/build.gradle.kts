@@ -9,6 +9,18 @@ android {
   buildFeatures {
     compose = true
   }
+
+  flavorDimensions += listOf("gms")
+  productFlavors {
+    create("gms") {
+      dimension = "gms"
+      isDefault = true
+    }
+
+    create("foss") {
+      dimension = "gms"
+    }
+  }
 }
 
 dependencies {
@@ -17,7 +29,8 @@ dependencies {
   implementation(project(":core:util"))
 
   implementation(libs.androidx.credentials)
-  implementation(libs.androidx.credentials.compat)
+  "gmsImplementation"(libs.androidx.credentials.compat)
+  "fossImplementation"(project(":lib:fakegms"))
 
   implementation(platform(libs.androidx.compose.bom))
   implementation(libs.androidx.compose.ui)

@@ -26,6 +26,18 @@ android {
   }
 
   experimentalProperties["android.experimental.enableScreenshotTest"] = true
+
+  flavorDimensions += listOf("gms")
+  productFlavors {
+    create("gms") {
+      dimension = "gms"
+      isDefault = true
+    }
+
+    create("foss") {
+      dimension = "gms"
+    }
+  }
 }
 
 screenshotTests {
@@ -61,7 +73,8 @@ dependencies {
   implementation(project(":core:util"))
   implementation(project(":core:models-jvm"))
   implementation(project(":core:serialization"))
-  implementation(project(":lib:billing"))
+  "gmsImplementation"(project(":lib:billing"))
+  "fossImplementation"(project(":lib:fakebilling"))
   implementation(project(":lib:device-transfer"))
   implementation(project(":lib:password-manager"))
   implementation(project(":lib:signal-login"))
@@ -97,8 +110,9 @@ dependencies {
   implementation(libs.google.libphonenumber)
 
   // Phone number hint + SMS verification code retriever
-  implementation(libs.google.play.services.auth)
-  implementation(libs.kotlinx.coroutines.play.services)
+  "gmsImplementation"(libs.google.play.services.auth)
+  "gmsImplementation"(libs.kotlinx.coroutines.play.services)
+  "fossImplementation"(project(":lib:fakegms"))
 
   // Testing
   testImplementation(testFixtures(project(":core:ui")))
