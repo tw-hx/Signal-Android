@@ -161,6 +161,11 @@ include(":screener")
 include(":benchmark")
 include(":baseline-profile")
 include(":microbenchmark")
+
+// LibFakeGMS + LibFakeBilling
+include(":lib:fakegms")
+include(":lib:fakebilling")
+
 // App project name
 project(":app").name = "Signal-Android"
 

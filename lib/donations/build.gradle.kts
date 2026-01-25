@@ -15,6 +15,26 @@ android {
   defaultConfig {
     vectorDrawables.useSupportLibrary = true
   }
+
+  flavorDimensions += listOf("gms")
+  productFlavors {
+    create("gms") {
+      dimension = "gms"
+      isDefault = true
+    }
+
+    create("foss") {
+      dimension = "gms"
+    }
+  }
+}
+
+androidComponents {
+  beforeVariants { variant ->
+    val sptr = gradle.startParameter.taskRequests.toString()
+    if (variant.name.lowercase().contains("foss")) variant.enable = sptr.contains("Foss")
+    else if (variant.name.lowercase().contains("gms")) variant.enable = sptr.contains("Gms")
+  }
 }
 
 dependencies {
@@ -36,6 +56,7 @@ dependencies {
   }
   testImplementation(testFixtures(project(":lib:libsignal-service")))
 
-  api(libs.google.play.services.wallet)
+  "gmsApi"(libs.google.play.services.wallet)
+  "fossApi"(project(":lib:fakegms"))
   api(libs.square.okhttp3)
 }
