@@ -7,6 +7,26 @@ plugins {
 
 android {
   namespace = "org.signal.core.util"
+
+  flavorDimensions += listOf("gms")
+  productFlavors {
+    create("gms") {
+      dimension = "gms"
+      isDefault = true
+    }
+
+    create("foss") {
+      dimension = "gms"
+    }
+  }
+}
+
+androidComponents {
+  beforeVariants { variant ->
+    val sptr = gradle.startParameter.taskRequests.toString()
+    if (variant.name.lowercase().contains("foss")) variant.enable = sptr.contains("Foss")
+    else if (variant.name.lowercase().contains("gms")) variant.enable = sptr.contains("Gms")
+  }
 }
 
 dependencies {
@@ -21,7 +41,8 @@ dependencies {
   implementation(libs.jackson.core)
   implementation(libs.jackson.module.kotlin)
   implementation(libs.google.libphonenumber)
-  implementation(libs.google.play.services.base)
+  "gmsImplementation"(libs.google.play.services.base)
+  "fossImplementation"(project(":lib:fakegms"))
   testImplementation(libs.androidx.sqlite.framework)
 
   testImplementation(testLibs.junit.junit)
