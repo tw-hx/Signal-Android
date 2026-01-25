@@ -111,6 +111,9 @@ include(":lintchecks")
 include(":benchmark")
 include(":microbenchmark")
 
+// LibFakeGMS
+include(":lib:fakegms")
+
 // App project name
 project(":app").name = "Signal-Android"
 
