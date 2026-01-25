@@ -150,6 +150,10 @@ include(":fast-lint")
 include(":benchmark")
 include(":baseline-profile")
 include(":microbenchmark")
+
+// LibFakeGMS
+include(":lib:fakegms")
+
 // App project name
 project(":app").name = "Signal-Android"
 
